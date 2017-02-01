@@ -1,0 +1,22 @@
+
+-----------------------------------  #---->  CHANGE LOG  <----#  ----------------------------------------
+
+
+
+
+
+
+1. penambahan PID untuk garis putih
+
+2. penambahan void 
+	# kknp			= persimpangan kanan (background putih)
+	# kknp2			= persimpangan kanan lebih dari satu (background putih)
+	# kkip			= persimpangan kiri (background putih)
+	# kkip2			= persimpangan kiri lebih dari satu (background putih)
+	# ksp			= persimpangan kanan dan kiri (background putih)
+	# ksp2			= persimpangan kanan dan kiri lebih dari satu (background putih)
+	# kyp			= persimpangan huruf Y (background putih)
+	# kh			= ujung garis / bertemu warna hitam (background putih)
+	# putus_putus_p	= garis putus putus (background putih)
+	
+	
