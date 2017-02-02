@@ -12,15 +12,15 @@ const char levels[] PROGMEM =
 	0b00000,
 	0b00000,
 	0b00000,
+	0b01010,
+	0b00000,
+	0b10001,
+	0b01010,
+	0b00100,
 	0b00000,
 	0b00000,
-	0b11111,
-	0b11111,
-	0b11111,
-	0b11111,
-	0b11111,
-	0b11111,
-	0b11111
+	0b00000,
+	0b00000
 	
 };
 ///-----------------------------------------------------------------------------------------------
@@ -44,8 +44,8 @@ void display_readings(const unsigned int *calibrated_values)
 {
 	unsigned char i;
 
-	for(i=0;i<5;i++) 
-	{	
+	for(i=0;i<5;i++) {
+		
 		const char display_characters[10] = {' ',0,0,1,2,3,4,5,6,255};
 		
 		char c = display_characters[calibrated_values[i]/101];
@@ -72,7 +72,7 @@ void initialize()
 		print_long(bat);
 		print("mV");
 		lcd_goto_xy(0,1);
-		print("POLOLU");
+		print("Tekan A");
 
 		delay_ms(100);
 	}
@@ -173,14 +173,13 @@ void kkn()
 	 read_line(sensors,IR_EMITTERS_ON);	 
 	 pid_h();
 	 	if (sensors[2]>500 && sensors[3]>500 && sensors[4]>500 )
-		{
-			play("L16ga");
-			set_motors(70,70);
-			delay_ms(50);
-			set_motors(0,0);
-			break;
+		{ 
+		play("L16ga");
+		set_motors(70,70);
+        delay_ms(50);
+        set_motors(0,0);
+		break;
 		}
-		
      }
 }
 ///============================================== KETEMU GARIS KANAN ================================================
@@ -192,7 +191,7 @@ void kkn2()
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		pid_h();
-		if (sensors[2]>500 && sensors[3]>500 && sensors[4]>500 )
+		if (sensors[2]>500 && sensors[4]>500 )
 		{
 			play("L16ga");
 			set_motors(70,70);
@@ -202,22 +201,22 @@ void kkn2()
 		}
 	}
 }
-///============================================= KETEMU GARIS KANAN TEBAL  ================================================
+///============================================= KETEMU GARIS KANAN MIRING  ================================================
 
 void kknp()
 {	 
      unsigned int sensors[5]; 
 	 while (1)
 	 {
-	 read_line(sensors,IR_EMITTERS_ON);	 
+	 read_line_white (sensors,IR_EMITTERS_ON);	 
 	 pid_p();
 	 	if (sensors[2]<400 && sensors[3]<400 && sensors[4]<400 )
-		{
-			play("L16ga");
-			set_motors(70,70);
-			delay_ms(50);
-			set_motors(0,0);
-			break;
+		{ 
+		play("L16ga");
+		set_motors(70,70);
+        delay_ms(50);
+        set_motors(0,0);
+		break;
 		}
      }
 }
@@ -228,9 +227,9 @@ void kknp2()
 	unsigned int sensors[5];
 	while (1)
 	{
-		read_line(sensors,IR_EMITTERS_ON);
+		read_line_white (sensors,IR_EMITTERS_ON);
 		pid_p();
-		if (sensors[2]<300 && sensors[3]<300 && sensors[4]<300 )
+		if (sensors[2]<300 && sensors[4]<300 )
 		{
 			play("L16ga");
 			set_motors(70,70);
@@ -240,23 +239,23 @@ void kknp2()
 		}
 	}
 }
-///============================================= KETEMU GARIS KANAN TEBAL UNTUK PUTIH ================================================
+///============================================= KETEMU GARIS KANAN MIRING UNTUK PUTIH ================================================
 
 void kki()
 {	 
      unsigned int sensors[5]; 
 	 while (1)
 	 {
-		  read_line(sensors,IR_EMITTERS_ON);
-		  pid_h();
-		  if (sensors[2]>500 && sensors[0]>500 && sensors[1]>500  )
-		  {
-			  play("L16ag");
-			  set_motors(70,70);
-			  delay_ms(50);
-			  set_motors(0,0);
-			  break;
-		  }
+	 read_line(sensors,IR_EMITTERS_ON);	 
+	 pid_h();
+	 	if (sensors[2]>500 && sensors[0]>500 && sensors[1]>500  )
+		{ 
+		 play("L16ag");
+         set_motors(70,70);
+         delay_ms(50);
+         set_motors(0,0);
+	     break;
+		}
      }
 }
 ///============================================= KETEMU GARIS KIRI =================================================
@@ -268,7 +267,7 @@ void kki2()
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		pid_h();
-		if (sensors[2]>500 && sensors[0]>500 && sensors[1]>500  )
+		if ( sensors[2]>500 && sensors[0]>500 )
 		{
 			play("L16ag");
 			set_motors(70,70);
@@ -278,23 +277,23 @@ void kki2()
 		}
 	}
 }
-///============================================= KETEMU GARIS KIRI TEBAL  =================================================
+///============================================= KETEMU GARIS KIRI MIRING  =================================================
 
 void kkip()
 {	 
      unsigned int sensors[5]; 
 	 while (1)
 	 {
-		 read_line_white(sensors,IR_EMITTERS_ON);
-		 pid_p();
-		 if (sensors[2]<400 && sensors[0]<400 && sensors[1]<400  )
-		 {
-			 play("L16ag");
-			 set_motors(70,70);
-			 delay_ms(50);
-			 set_motors(0,0);
-			 break;
-		 }
+	 read_line_white(sensors,IR_EMITTERS_ON);	 
+	 pid_p();
+	 	if (sensors[2]<400 && sensors[0]<400 && sensors[1]<400  )
+		{ 
+		 play("L16ag");
+         set_motors(70,70);
+         delay_ms(50);
+         set_motors(0,0);
+	     break;
+		}
      }
 }
 ///======================================== KETEMU GARIS KIRI UNTUK PUTIH =================================================
@@ -304,9 +303,9 @@ void kkip2()
 	unsigned int sensors[5];
 	while (1)
 	{
-		read_line(sensors,IR_EMITTERS_ON);
+		read_line_white(sensors,IR_EMITTERS_ON);
 		pid_p();
-		if (sensors[2]<500 && sensors[0]<500 && sensors[1]<500  )
+		if ( sensors[2]<500 && sensors[0]<500 )
 		{
 			play("L16ag");
 			set_motors(70,70);
@@ -316,23 +315,23 @@ void kkip2()
 		}
 	}
 }
-///========================================= KETEMU GARIS KIRI TEBAL UNTUK PUTIH =================================================
+///========================================= KETEMU GARIS KIRI MIRING UNTUK PUTIH =================================================
 
 void ks()
 {	 
      unsigned int sensors[5]; 
 	 while (1)
 	 {
-		 read_line(sensors,IR_EMITTERS_ON);
-		 pid_h();
-		 if (sensors[2]>500 && sensors[0]>500 && sensors[1]>500 && sensors[3]>500 && sensors[4]>500 )
-		 {
-			 play("L16ag");
-			 set_motors(70,70);
-			 delay_ms(50);
-			 set_motors(0,0);
-			 break;
-		 }
+	 read_line(sensors,IR_EMITTERS_ON);	 
+	 pid_h();
+	 if (sensors[2]>500 && sensors[0]>500 && sensors[1]>500 && sensors[3]>500 && sensors[4]>500 )
+		{ 
+		play("L16ag");
+        set_motors(70,70);
+        delay_ms(50);
+        set_motors(0,0);
+		break;
+		}
      }
 }
 ///============================================== KETEMU SEMUA GARIS ================================================ 
@@ -344,7 +343,7 @@ void ks2()
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		pid_h();
-		if (sensors[2]>500 && sensors[0]>400 && sensors[1]>500 && sensors[3]>500 && sensors[4]>400 )
+		if (sensors[2]>500 && sensors[0]>400 && sensors[4]>400 )
 		{
 			play("L16ag");
 			set_motors(70,70);
@@ -354,23 +353,23 @@ void ks2()
 		}
 	}
 }
-///============================================= KETEMU SEMUA GARIS TEBAL  ==================================================
+///============================================= KETEMU SEMUA GARIS MIRING  ==================================================
 
 void ksp()
 {	 
      unsigned int sensors[5]; 
 	 while (1)
 	 {
-		  read_line(sensors,IR_EMITTERS_ON);
-		  pid_p();
-		  if (sensors[0]<400 && sensors[1]<400 && sensors[2]<400 && sensors[3]<400 && sensors[4]<400 )
-		  {
-			  play("L16ag");
-			  set_motors(70,70);
-			  delay_ms(50);
-			  set_motors(0,0);
-			  break;
-		  }
+	 read_line_white(sensors,IR_EMITTERS_ON);	 
+	 pid_p();
+	 if (sensors[0]<400 && sensors[1]<400 && sensors[2]<400 && sensors[3]<400 && sensors[4]<400 )
+		{ 
+		play("L16ag");
+        set_motors(70,70);
+        delay_ms(50);
+        set_motors(0,0);
+		break;
+		}
      }
 }
 ///========================================== KETEMU SEMUA GARIS UNTUK PUTIH ================================================ 
@@ -382,7 +381,7 @@ void ksp2()
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		pid_p();
-		if (sensors[2]<500 && sensors[0]<400 && sensors[1]<500 && sensors[3]<500 && sensors[4]<400 )
+		if (sensors[2]<300 && sensors[0]<300 && sensors[4]<300 )
 		{
 			play("L16ag");
 			set_motors(70,70);
@@ -392,22 +391,22 @@ void ksp2()
 		}
 	}
 }
-///============================================= KETEMU SEMUA GARIS UNTUK PUTIH TEBAL  ==================================================
+///============================================= KETEMU SEMUA GARIS UNTUK PUTIH MIRING  ==================================================
 
 void kp()
 { 
   while(1)
 	{
-		read_line(sensors,IR_EMITTERS_ON);
-		pid_h();
-		if (sensors[0]<100 && sensors[1]<100  && sensors[2]<100  && sensors[3]<100  && sensors[4]<100 )
-		{
-			play("L16ga");
-			set_motors(70,70);
-			delay_ms(50);
-			set_motors(0,0);
-			break;
-		}
+	read_line(sensors,IR_EMITTERS_ON);
+	pid_h();
+	 if (sensors[0]<100 && sensors[1]<100  && sensors[2]<100  && sensors[3]<100  && sensors[4]<100 )
+	 {
+	 play("L16ga");
+	 set_motors(70,70);
+     delay_ms(50);
+     set_motors(0,0);
+	 break;
+	 }
     }
 }
 ///========================================= KETEMU GARIS PUTIH =====================================================
@@ -416,16 +415,16 @@ void kh()
 { 
   while(1)
 	{
-		read_line_white(sensors,IR_EMITTERS_ON);
-		pid_p();
-		if (sensors[0]>500 && sensors[1]>500  && sensors[2]>500  && sensors[3]>500  && sensors[4]>500 )
-		{
-			play("L16ga");
-			set_motors(70,70);
-			delay_ms(50);
-			set_motors(0,0);
-			break;
-		}
+	read_line(sensors,IR_EMITTERS_ON);
+	pid_p();
+	 if (sensors[0]>500 && sensors[1]>500  && sensors[2]>500  && sensors[3]>500  && sensors[4]>500 )
+	 {
+	 play("L16ga");
+	 set_motors(70,70);
+     delay_ms(50);
+     set_motors(0,0);
+	 break;
+	 }
     }
 }
 ///========================================= KETEMU GARIS HITAM =====================================================
@@ -435,16 +434,16 @@ void ky()
    unsigned int sensors[5]; 
    while (1)
 	 {
-		 read_line(sensors,IR_EMITTERS_ON);
-		 pid_h();
-		 if ( sensors[0]>400 &&  sensors[4]>400 )
-		 {
-			 play("L16ag");
-			 set_motors(70,70);
-			 delay_ms(50);
-			 set_motors(0,0);
-			 break;
-		 }
+	 read_line(sensors,IR_EMITTERS_ON);	 
+	 pid_h();
+	 	if ( sensors[0]>400 &&  sensors[4]>400 )
+		{ 
+	 play("L16ag");
+     set_motors(70,70);
+     delay_ms(50);
+     set_motors(0,0);
+     break;
+		}
      }
 }
 ///========================================= KETEMU PERSIMPANGAN (Y) =====================================================
@@ -454,16 +453,16 @@ void kyp()
    unsigned int sensors[5]; 
    while (1)
 	 {
-		 read_line_white(sensors,IR_EMITTERS_ON);
-		 pid_p();
-		 if ( sensors[0]<300 && sensors[4]<300 )
-		 {
-			 play("L16ag");
-			 set_motors(70,70);
-			 delay_ms(50);
-			 set_motors(0,0);
-			 break;
-		 }
+	 read_line(sensors,IR_EMITTERS_ON);	 
+	 pid_p();
+	 	if ( sensors[0]<300 && sensors[4]<300 )
+		{ 
+	 play("L16ag");
+     set_motors(70,70);
+     delay_ms(50);
+     set_motors(0,0);
+     break;
+		}
      }
 }
 ///=================================== KETEMU PERSIMPANGAN (Y) UNTUK PUTIH =====================================================
@@ -498,13 +497,13 @@ void putus_putus_p()
 	unsigned int sensors[5];
 	while(1)
 	{
-		read_line_white(sensors,IR_EMITTERS_ON);
+		read_line(sensors,IR_EMITTERS_ON);
 		if(sensors[2]>500)
 		{
 			set_motors(70,70);
 			while(1)
 			{
-				read_line_white(sensors,IR_EMITTERS_ON);
+				read_line(sensors,IR_EMITTERS_ON);
 				if(sensors[3]<300 || sensors[2]<300 || sensors[1]<300)
 				{
 					set_motors(0,0);
@@ -528,194 +527,194 @@ void u()
 
 void kn()
 {
-	unsigned int sensors[5];
-	while(1)
+unsigned int sensors[5]; 
+while(1)
+ 	{ 
+	read_line(sensors,IR_EMITTERS_ON);
+	set_motors(70,-70);
+	if(sensors[2]<100)
 	{
-		read_line(sensors,IR_EMITTERS_ON);
-		set_motors(70,-70);
-		if(sensors[2]<100)
-		{
-			while(1)
-			{
-				read_line(sensors,IR_EMITTERS_ON);
-				right_led(1);
-				set_motors(70,-70);
-				if(sensors[2]>500)
-				{
-					right_led(0);
-					break;
-				}
-			}
-			break;
-		}
-	}
+	 while(1)
+       {
+	     read_line(sensors,IR_EMITTERS_ON);
+ 	     right_led(1);
+	     set_motors(70,-70);
+	     if(sensors[2]>500)
+	     {
+		 right_led(0);
+	     break;
+	     }
+		 }
+		 break;
+	   }
+      
+	} 
 }
 ///============================================ BELOK KANAN ==================================================
 
 void knp()
 {
-	unsigned int sensors[5];
-	while(1)
+unsigned int sensors[5]; 
+while(1)
+ 	{ 
+	read_line_white(sensors,IR_EMITTERS_ON);
+	set_motors(70,-70);
+	if(sensors[2]>500)
 	{
-		read_line_white(sensors,IR_EMITTERS_ON);
-		set_motors(70,-70);
-		if(sensors[2]>500)
-		{
-			while(1)
-			{
-				read_line_white(sensors,IR_EMITTERS_ON);
-				right_led(1);
-				set_motors(70,-70);
-				if(sensors[2]<100)
-				{
-					right_led(0);
-					break;
-				}
-			}
-			break;
-		}
-		
-	}
+	 while(1)
+       {
+	     read_line_white(sensors,IR_EMITTERS_ON);
+ 	     right_led(1);
+	     set_motors(70,-70);
+	     if(sensors[2]<100)
+	     {
+		 right_led(0);
+	     break;
+	     }
+		 }
+		 break;
+	   }
+      
+	} 
 }
 ///======================================= BELOK KANAN UNTUK PUTIH ==================================================
 
 void ki()
 {
-	unsigned int sensors[5];
-	while(1)
-	{
-		read_line(sensors,IR_EMITTERS_ON);
-		set_motors(-70,70);
-		if(sensors[2]<100)
-		{
-			while(1)
-			{
-				read_line(sensors,IR_EMITTERS_ON);
-				left_led(1);
-				set_motors(-70,70);
-				if(sensors[2]>500)
-				{
-					left_led(0);
-					break;
-				}
-			}
-			break;
-		}
-		
-	}
+unsigned int sensors[5]; 
+while(1)
+ 	{ 
+	read_line(sensors,IR_EMITTERS_ON);
+	set_motors(-70,70);
+	if(sensors[2]<100)
+	   {
+	     while(1)
+         {
+	      read_line(sensors,IR_EMITTERS_ON);
+ 	      left_led(1);
+	      set_motors(-70,70);
+	      if(sensors[2]>500)
+	       {
+		   left_led(0);
+	       break;
+	       }
+		 }
+		 break;
+	   }
+      
+	} 
 }
 ///=============================================== BELOK KIRI ===============================================
 
 void kip()
 {
-	unsigned int sensors[5];
-	while(1)
-	{
-		read_line_white(sensors,IR_EMITTERS_ON);
-		set_motors(-70,70);
-		if(sensors[2]>500)
-		{
-			while(1)
-			{
-				read_line_white(sensors,IR_EMITTERS_ON);
-				left_led(1);
-				set_motors(-70,70);
-				if(sensors[2]<100)
-				{
-					left_led(0);
-					break;
-				}
-			}
-			break;
-		}
-		
-	}
+unsigned int sensors[5]; 
+while(1)
+ 	{ 
+	read_line_white(sensors,IR_EMITTERS_ON);
+	set_motors(-70,70);
+	if(sensors[2]>500)
+	   {
+	     while(1)
+         {
+	      read_line_white(sensors,IR_EMITTERS_ON);
+ 	      left_led(1);
+	      set_motors(-70,70);
+	      if(sensors[2]<100)
+	       {
+		   left_led(0);
+	       break;
+	       }
+		 }
+		 break;
+	   }
+      
+	} 
 }
 ///=============================================== BELOK KIRI UNTUK PUTIH ===============================================
 
 void maju()
-{
-	 set_motors(70,70);
-	 delay_ms(50);
-	 set_motors(0,0);
+{ 
+  set_motors(70,70);
+  delay_ms(50);
+  set_motors(0,0);
 }
 ///=============================================== MAJU ===============================================
 
 void stop()
 {
-	set_motors(0,0);
+set_motors(0,0);
 }
 ///============================================== STOP ==============================================
 
 void end()
 {
-	set_motors(0,0);
-	while(!button_is_pressed(BUTTON_A));
+set_motors(0,0);
+while(!button_is_pressed(BUTTON_A));
 }
 ///============================================= STOP LOOP ================================================
 
 void kn45()
-{
-	set_motors(50,-50);
-	delay_ms(170);
-	set_motors(0,0);
+{ 
+  set_motors(50,-50);
+  delay_ms(170);
+  set_motors(0,0);
 }
-
 //=================== kanan 45 =====================================================================
 
 void kn90()
-{
-	set_motors(50,-50);
-	delay_ms(350);
-	set_motors(0,0);
+{ 
+  set_motors(50,-50);
+  delay_ms(350);
+  set_motors(0,0);
 }
 //=================== kanan 90 ====================================================================
 
 void kn135()
-{
-	set_motors(50,-50);
-	delay_ms(470);
-	set_motors(0,0);
+{ 
+  set_motors(50,-50);
+  delay_ms(470);
+  set_motors(0,0);
 }
 ///=================== kanan 135 ====================================================================
 
 void ki45()
-{
-	set_motors(-50,50);
-	delay_ms(250);
-	set_motors(0,0);
+{ 
+  set_motors(-50,50);
+  delay_ms(250);
+  set_motors(0,0);
 }
 ///=================== KIRI 45 =====================================================================
 
 void ki90()
-{
-	set_motors(-50,50);
-	delay_ms(300);
-	set_motors(0,0);
+{ 
+  set_motors(-50,50);
+  delay_ms(300);
+  set_motors(0,0);
 }
 ///=================== KIRI 90 ====================================================================
 
 void ki135()
-{
-	set_motors(-50,50);
-	delay_ms(400);
-	set_motors(0,0);
+{ 
+  set_motors(-50,50);
+  delay_ms(400);
+  set_motors(0,0);
 }
 ///=================== KIRI 135 ====================================================================
 
 void kn30()
-{
-	set_motors(50,-50);
-	delay_ms(90);
-	set_motors(0,0);
+{ 
+  set_motors(50,-50);
+  delay_ms(90);
+  set_motors(0,0);
 }
 //=================== kanan 90 ====================================================================
 
 void ki30()
-{
-	set_motors(-50,50);
-	delay_ms(100);
-	set_motors(0,0);
+{ 
+  set_motors(-50,50);
+  delay_ms(100);
+  set_motors(0,0);
 }
 //=================== kiri 90 ====================================================================
 
@@ -726,19 +725,20 @@ void ki30()
 
 int main()
 {
-	cepat_h = 150 ; // Kecepatan motor pada lintasan hitam
-	cepat_p = 100 ; // Kecepatan motor pada lintasan putih
+cepat_h = 150 ; // Kecepatan motor pada lintasan hitam
+cepat_p = 100 ; // Kecepatan motor pada lintasan putih
 
-	initialize();   // Kalibrasi sensor
-	
-	while(1)
-	{
-		
-		
-		
-		
-		
-	}
+initialize();
+while(1)
+  {
+  
+  
+
+
+
+
+
+  }
 }
 /*----------------------------------------------------------------------------------------------------------------------------
                                          SELESAI
