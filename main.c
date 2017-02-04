@@ -210,7 +210,7 @@ void kknp()
 	 {
 	 read_line_white (sensors,IR_EMITTERS_ON);	 
 	 pid_p();
-	 	if (sensors[2]<400 && sensors[3]<400 && sensors[4]<400 )
+	 	if (sensors[2]<100 && sensors[3]<100 && sensors[4]<100 )
 		{ 
 		play("L16ga");
 		set_motors(70,70);
@@ -229,7 +229,7 @@ void kknp2()
 	{
 		read_line_white (sensors,IR_EMITTERS_ON);
 		pid_p();
-		if (sensors[2]<300 && sensors[4]<300 )
+		if (sensors[2]<100 && sensors[4]<100 )
 		{
 			play("L16ga");
 			set_motors(70,70);
@@ -286,7 +286,7 @@ void kkip()
 	 {
 	 read_line_white(sensors,IR_EMITTERS_ON);	 
 	 pid_p();
-	 	if (sensors[2]<400 && sensors[0]<400 && sensors[1]<400  )
+	 	if (sensors[2]<100 && sensors[0]<100 && sensors[1]<100  )
 		{ 
 		 play("L16ag");
          set_motors(70,70);
@@ -305,7 +305,7 @@ void kkip2()
 	{
 		read_line_white(sensors,IR_EMITTERS_ON);
 		pid_p();
-		if ( sensors[2]<500 && sensors[0]<500 )
+		if ( sensors[2]<100 && sensors[0]<100 )
 		{
 			play("L16ag");
 			set_motors(70,70);
@@ -362,7 +362,7 @@ void ksp()
 	 {
 	 read_line_white(sensors,IR_EMITTERS_ON);	 
 	 pid_p();
-	 if (sensors[0]<400 && sensors[1]<400 && sensors[2]<400 && sensors[3]<400 && sensors[4]<400 )
+	 if (sensors[0]<100 && sensors[1]<100 && sensors[2]<100 && sensors[3]<100 && sensors[4]<100 )
 		{ 
 		play("L16ag");
         set_motors(70,70);
@@ -381,7 +381,7 @@ void ksp2()
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		pid_p();
-		if (sensors[2]<300 && sensors[0]<300 && sensors[4]<300 )
+		if (sensors[2]<100 && sensors[0]<100 && sensors[4]<100 )
 		{
 			play("L16ag");
 			set_motors(70,70);
@@ -455,7 +455,7 @@ void kyp()
 	 {
 	 read_line(sensors,IR_EMITTERS_ON);	 
 	 pid_p();
-	 	if ( sensors[0]<300 && sensors[4]<300 )
+	 	if ( sensors[0]<100 && sensors[4]<100 )
 		{ 
 	 play("L16ag");
      set_motors(70,70);
@@ -479,7 +479,7 @@ void putus_putus()
 			while(1)
 			{
 				read_line(sensors,IR_EMITTERS_ON);
-				if(sensors[3]>300 || sensors[2]>300 || sensors[1]>300)
+				if(sensors[3]>400 || sensors[2]>400 || sensors[1]>400)
 				{
 					set_motors(0,0);
 					delay_ms(50);
@@ -504,7 +504,7 @@ void putus_putus_p()
 			while(1)
 			{
 				read_line(sensors,IR_EMITTERS_ON);
-				if(sensors[3]<300 || sensors[2]<300 || sensors[1]<300)
+				if(sensors[3]<100 || sensors[2]<100 || sensors[1]<100)
 				{
 					set_motors(0,0);
 					delay_ms(50);
