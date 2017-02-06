@@ -478,7 +478,7 @@ void putus_putus()
 			set_motors(70,70);
 			while(1)
 			{
-				read_line(sensors,IR_EMITTERS_ON);
+				read_line_white(sensors,IR_EMITTERS_ON);
 				if(sensors[3]>400 || sensors[2]>400 || sensors[1]>400)
 				{
 					set_motors(0,0);

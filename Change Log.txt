@@ -1,0 +1,30 @@
+
+-----------------------------------  #---->  CHANGE LOG  <----#  ----------------------------------------
+
+
+
+
+
+
+1. penambahan PID untuk garis putih
+
+2. penambahan void 
+	# kknp			= persimpangan kanan (track putih)
+	# kknp2			= persimpangan kanan lebih dari satu (track putih)
+	# kkip			= persimpangan kiri (track putih)
+	# kkip2			= persimpangan kiri lebih dari satu (track putih)
+	# ksp			= persimpangan kanan dan kiri (track putih)
+	# ksp2			= persimpangan kanan dan kiri lebih dari satu (track putih)
+	# kyp			= persimpangan huruf Y (track putih)
+	# kh			= ujung garis / bertemu warna hitam (track putih)
+	# putus_putus_p	= garis putus putus (track putih)
+
+3. penggunaan sensor 
+	# [0],[2] untuk kki2 dan kkip2
+	# [4],[2] untuk kkn2 dan kknp2
+
+4. merubah nilai sensor untuk void track putih
+	# 100
+
+
+	
