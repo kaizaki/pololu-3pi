@@ -497,7 +497,7 @@ void putus_putus_p()
 	unsigned int sensors[5];
 	while(1)
 	{
-		read_line(sensors,IR_EMITTERS_ON);
+		read_line_white(sensors,IR_EMITTERS_ON);
 		if(sensors[2]>500)
 		{
 			set_motors(70,70);
