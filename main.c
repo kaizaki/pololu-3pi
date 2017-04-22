@@ -4,6 +4,12 @@ unsigned int sensors[5];
 unsigned int last_proportional=0;
 long integral=0;
 unsigned char speed;
+static long elapsed_time = 0;
+static long last_read = 0;
+static long is_ticking = 0;
+static char a_is_pressed = 0;
+static char last_seconds = 0;
+
 
 const char levels[] PROGMEM = 
 {
@@ -64,6 +70,11 @@ void initialize()
 	
 	pololu_3pi_init(2000);
 	load_custom_characters();
+	long current_time = get_ms();
+	if(is_ticking)
+	elapsed_time += current_time - last_read;
+
+	last_read = current_time;
 	while(!button_is_pressed(BUTTON_A))
 	{
 		int bat = read_battery_millivolts();
@@ -101,10 +112,27 @@ void initialize()
 		delay_ms(100);
 	}
 	wait_for_button_release(BUTTON_A);
-
+	elapsed_time = 0;
 	clear();
 
-	print("LET'S GO");
+			a_is_pressed = 1;
+			is_ticking = !is_ticking;
+
+
+		print_long((elapsed_time/1000/60/10)%10); // tens of minutes
+		print_long((elapsed_time/1000/60)%10); // minutes
+		print_character(':');
+		print_long((elapsed_time/1000)%60/10); // tens of seconds
+		char seconds = ((elapsed_time/1000)%60)%10;
+		print_long(seconds); // seconds
+		print_character('.');
+		print_long((elapsed_time/100)%10); // tenths of seconds
+		print_long((elapsed_time/10)%10); // hundredths of seconds
+
+		
+		
+		last_seconds = seconds;
+	
 
 
 	play("L8bfareg4");
@@ -633,6 +661,208 @@ while(1)
 }
 ///=============================================== BELOK KIRI UNTUK PUTIH ===============================================
 
+void h()
+{
+	unsigned int sensors[5];
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		pid_p();
+		if (sensors[2]>500)
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+	pid_h();
+}
+//============================================ Bertemu Pergantian Garis warna hitam (awal putih) ===================================
+
+void p()
+{
+	unsigned int sensors[5];
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		pid_h();
+		if (sensors[2]<100)
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+	pid_h();
+}
+//============================================ Bertemu Pergantian Garis warna putih (awal hitam) ===================================
+
+//=========================================== VOID UNTUK TRACK LOMPAT =====================================
+//1. VOID LOMPAT DENGAN AKHIRAN SEMUA GARIS (KANAN DAN KIRI) [TRACK HITAM]
+void lompat_ks()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( sensors[2]>500 && sensors[1]>500 && sensors[3]>500 )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//2. VOID LOMPAT DENGAN AKHIRAN SEMUA GARIS (KANAN DAN KIRI) [TRACK PUTIH]
+void lompat_ksp()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( sensors[2]<100 && sensors[1]<100 && sensors[3]<100 )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//3. VOID LOMPAT DENGAN AKHIRAN SATU GARIS LURUS [TRACK HITAM]
+void lompat_h()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( sensors[2]>500 )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//4. VOID LOMPAT DENGAN AKHIRAN SATU GARIS LURUS [TRACK PUTIH]
+void lompat_p()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( sensors[2]<100 )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//5. VOID LOMPAT DENGAN AKHIRAN GARIS KANAN [TRACK HITAM]
+void lompat_kn()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( (sensors[2]>500 && sensors[4]>500 && sensors[3]>500) || (sensors[4]>500 && sensors[3]>500) || (sensors[4]>500) )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//6. VOID LOMPAT DENGAN AKHIRAN GARIS KANAN [TRACK PUTIH]
+void lompat_knp()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( (sensors[2]<100 && sensors[4]<100 && sensors[3]<100) || (sensors[4]<100 && sensors[3]<100) || (sensors[4]<100) )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//7. VOID LOMPAT DENGAN AKHIRAN GARIS KIRI [TRACK HITAM]
+void lompat_ki()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( (sensors[2]>500 && sensors[1]>500 && sensors[0]>500) || (sensors[1]>500 && sensors[0]>500) || (sensors[0]>500) )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+//8. VOID LOMPAT DENGAN AKHIRAN GARIS KIRI [TRACK PUTIH]
+void lompat_kip()
+{
+	unsigned int sensors[5];
+	set_motors(100,100);
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( (sensors[2]<100 && sensors[1]<100 && sensors[0]<100) || (sensors[1]<100 && sensors[0]<100) || (sensors[0]<100) )
+		{
+			play("L16ag");
+			set_motors(70,70);
+			delay_ms(50);
+			set_motors(0,0);
+			break;
+		}
+	}
+}
+
+
+
 void maju()
 { 
   set_motors(70,70);
@@ -650,6 +880,7 @@ set_motors(0,0);
 void end()
 {
 set_motors(0,0);
+is_ticking = 0;
 while(!button_is_pressed(BUTTON_A));
 }
 ///============================================= STOP LOOP ================================================
