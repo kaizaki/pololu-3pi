@@ -506,7 +506,7 @@ void putus_putus()
 			set_motors(70,70);
 			while(1)
 			{
-				read_line_white(sensors,IR_EMITTERS_ON);
+				read_line_white(sensors,IR_EMITTERS_ON); 
 				if(sensors[3]>400 || sensors[2]>400 || sensors[1]>400)
 				{
 					set_motors(0,0);
@@ -701,6 +701,8 @@ void p()
 }
 //============================================ Bertemu Pergantian Garis warna putih (awal hitam) ===================================
 
+
+
 //=========================================== VOID UNTUK TRACK LOMPAT =====================================
 //1. VOID LOMPAT DENGAN AKHIRAN SEMUA GARIS (KANAN DAN KIRI) [TRACK HITAM]
 void lompat_ks()
@@ -721,7 +723,6 @@ void lompat_ks()
 	}
 }
 
-
 //2. VOID LOMPAT DENGAN AKHIRAN SEMUA GARIS (KANAN DAN KIRI) [TRACK PUTIH]
 void lompat_ksp()
 {
@@ -740,7 +741,6 @@ void lompat_ksp()
 		}
 	}
 }
-
 
 //3. VOID LOMPAT DENGAN AKHIRAN SATU GARIS LURUS [TRACK HITAM]
 void lompat_h()
@@ -761,7 +761,6 @@ void lompat_h()
 	}
 }
 
-
 //4. VOID LOMPAT DENGAN AKHIRAN SATU GARIS LURUS [TRACK PUTIH]
 void lompat_p()
 {
@@ -780,7 +779,6 @@ void lompat_p()
 		}
 	}
 }
-
 
 //5. VOID LOMPAT DENGAN AKHIRAN GARIS KANAN [TRACK HITAM]
 void lompat_kn()
@@ -801,7 +799,6 @@ void lompat_kn()
 	}
 }
 
-
 //6. VOID LOMPAT DENGAN AKHIRAN GARIS KANAN [TRACK PUTIH]
 void lompat_knp()
 {
@@ -820,7 +817,6 @@ void lompat_knp()
 		}
 	}
 }
-
 
 //7. VOID LOMPAT DENGAN AKHIRAN GARIS KIRI [TRACK HITAM]
 void lompat_ki()
@@ -841,7 +837,6 @@ void lompat_ki()
 	}
 }
 
-
 //8. VOID LOMPAT DENGAN AKHIRAN GARIS KIRI [TRACK PUTIH]
 void lompat_kip()
 {
@@ -860,7 +855,196 @@ void lompat_kip()
 		}
 	}
 }
+//==================================================================================================================================================
 
+
+
+void jalan_sensor_34()
+{
+	unsigned int sensors[5];
+	 while(1)
+	 {
+		 
+		 unsigned int position = read_line(sensors,IR_EMITTERS_ON);
+		 
+		 if(position < 1000)
+		 {
+	
+			 set_motors(0,100);
+			 
+		 }
+		 else if(position < 3000)
+		 {
+			
+			 set_motors(100,100);
+			 left_led(1);
+			 right_led(1);
+		 }
+		 else
+		 {
+			 set_motors(100,0);
+			 left_led(0);
+			 right_led(1);
+		 }
+		 break;
+	 }
+}
+
+void jalan_sensor_01()
+{
+	unsigned int sensors[5];
+	while(1)
+	{
+		
+		unsigned int position = read_line(sensors,IR_EMITTERS_ON);
+		
+		if(position < 1000)
+		{
+			
+			set_motors(0,100);
+			
+		}
+		else if(position < 3000)
+		{
+			
+			set_motors(100,100);
+			left_led(1);
+			right_led(1);
+		}
+		else
+		{
+			set_motors(100,0);
+			left_led(0);
+			right_led(1);
+		}
+		
+	}
+}
+
+void jalan_sensor_34p()
+{
+	unsigned int sensors[5];
+	while(1)
+	{
+		
+		unsigned int position = read_line_white(sensors,IR_EMITTERS_ON);
+		
+		if(position < 1000)
+		{
+			
+			set_motors(0,100);
+			
+		}
+		else if(position < 3000)
+		{
+			
+			set_motors(100,100);
+			left_led(1);
+			right_led(1);
+		}
+		else
+		{
+			set_motors(100,0);
+			left_led(0);
+			right_led(1);
+		}
+		break;
+	}
+}
+
+void jalan_sensor_01p()
+{
+	unsigned int sensors[5];
+	while(1)
+	{
+		
+		unsigned int position = read_line_white(sensors,IR_EMITTERS_ON);
+		
+		if(position < 1000)
+		{
+			
+			set_motors(0,100);
+			
+		}
+		else if(position < 3000)
+		{
+			
+			set_motors(100,100);
+			left_led(1);
+			right_led(1);
+		}
+		else
+		{
+			set_motors(100,0);
+			left_led(0);
+			right_led(1);
+		}
+		
+	}
+}
+
+
+void ps()
+{
+	unsigned int sensors[5];
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( sensors[2]<100 && sensors[4]>400 )
+		{
+			set_motors(100,100);
+			delay_ms(50);
+			jalan_sensor_34();
+		}
+		else if ( sensors[2]<100 && sensors[0]>400 )
+		{
+			set_motors(100,100);
+			delay_ms(50);
+			jalan_sensor_01();	
+		}
+		else
+		{
+			if ( sensors[2]>400 )
+			{
+				pid_h();
+				break;
+			}
+		}
+	}
+		
+}
+///============================================= MAJU PUTUS SAMPING  ================================================
+
+void psp()
+{
+	unsigned int sensors[5];
+	while (1)
+	{
+		read_line(sensors,IR_EMITTERS_ON);
+		if ( sensors[2]>400 && sensors[4]<100 )
+		{
+			set_motors(100,100);
+			delay_ms(50);
+			jalan_sensor_34();
+		}
+		else if ( sensors[2]>400 && sensors[0]<100 )
+		{
+			set_motors(100,100);
+			delay_ms(50);
+			jalan_sensor_01();
+		}
+		else
+		{
+			if ( sensors[2]<100 )
+			{
+				pid_p();
+				break;
+			}
+		}
+	}
+	
+}
+///============================================= MAJU PUTUS SAMPING TRACK PUTIH  ================================================
 
 
 void maju()
