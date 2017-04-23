@@ -129,6 +129,16 @@ Discarded input sections
                 0x00000000       0x92 main.o
  .text.lompat_kip
                 0x00000000       0x8e main.o
+ .text.jalan_sensor_34
+                0x00000000       0x74 main.o
+ .text.jalan_sensor_01
+                0x00000000       0x64 main.o
+ .text.jalan_sensor_34p
+                0x00000000       0x74 main.o
+ .text.jalan_sensor_01p
+                0x00000000       0x64 main.o
+ .text.ps       0x00000000       0x8a main.o
+ .text.psp      0x00000000       0x8c main.o
  .text.maju     0x00000000       0x20 main.o
  .text.stop     0x00000000        0xc main.o
  .text.end      0x00000000       0x28 main.o
@@ -1364,38 +1374,38 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x1c8
+.debug_aranges  0x00000000      0x1f8
  *(.debug_aranges)
  .debug_aranges
-                0x00000000      0x1c8 main.o
+                0x00000000      0x1f8 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2b9f
+.debug_info     0x00000000     0x326b
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0x2b9f main.o
+ .debug_info    0x00000000     0x326b main.o
 
-.debug_abbrev   0x00000000      0x3f0
+.debug_abbrev   0x00000000      0x440
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x3f0 main.o
+ .debug_abbrev  0x00000000      0x440 main.o
 
-.debug_line     0x00000000      0xd09
+.debug_line     0x00000000      0xe17
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0xd09 main.o
+ .debug_line    0x00000000      0xe17 main.o
 
-.debug_frame    0x00000000      0x64c
+.debug_frame    0x00000000      0x70c
  *(.debug_frame)
- .debug_frame   0x00000000      0x64c main.o
+ .debug_frame   0x00000000      0x70c main.o
 
-.debug_str      0x00000000      0x4ce
+.debug_str      0x00000000      0x510
  *(.debug_str)
- .debug_str     0x00000000      0x4ce main.o
-                                0x52e (size before relaxing)
+ .debug_str     0x00000000      0x510 main.o
+                                0x570 (size before relaxing)
 
-.debug_loc      0x00000000      0xed9
+.debug_loc      0x00000000     0x122b
  *(.debug_loc)
- .debug_loc     0x00000000      0xed9 main.o
+ .debug_loc     0x00000000     0x122b main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -1415,9 +1425,9 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x1b8
+.debug_ranges   0x00000000      0x200
  *(.debug_ranges)
- .debug_ranges  0x00000000      0x1b8 main.o
+ .debug_ranges  0x00000000      0x200 main.o
 
 .debug_macro
  *(.debug_macro)
