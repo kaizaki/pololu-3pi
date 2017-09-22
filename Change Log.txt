@@ -26,5 +26,5 @@
 4. merubah nilai sensor untuk void track putih
 	# 100
 
-
+5. penambahan stopwatch
 	

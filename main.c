@@ -7,8 +7,8 @@ unsigned char speed;
 static long elapsed_time = 0;
 static long last_read = 0;
 static long is_ticking = 0;
-static char a_is_pressed = 0;
-static char last_seconds = 0;
+
+
 
 
 const char levels[] PROGMEM = 
@@ -62,6 +62,7 @@ void display_readings(const unsigned int *calibrated_values)
 ///-----------------------------------------------------------------------------------------------
 ///-----------------------------------------------------------------------------------------------
 
+
 void initialize()
 {
 	unsigned int counter; 
@@ -73,9 +74,10 @@ void initialize()
 	long current_time = get_ms();
 	if(is_ticking)
 	elapsed_time += current_time - last_read;
-
+	
 	last_read = current_time;
-	while(!button_is_pressed(BUTTON_A))
+	
+	while(!button_is_pressed(BUTTON_C))
 	{
 		int bat = read_battery_millivolts();
 
@@ -83,7 +85,7 @@ void initialize()
 		print_long(bat);
 		print("mV");
 		lcd_goto_xy(0,1);
-		print("Tekan A");
+		print("Tekan C");
 
 		delay_ms(100);
 	}
@@ -101,7 +103,7 @@ void initialize()
 	set_motors(0,0);
 
 
-	while(!button_is_pressed(BUTTON_A))
+	while(!button_is_pressed(BUTTON_C))
 	{
 
 		unsigned int position = read_line(sensors,IR_EMITTERS_ON);
@@ -110,33 +112,29 @@ void initialize()
 		lcd_goto_xy(0,1);
 		display_readings(sensors);
 		delay_ms(100);
-	}
-	wait_for_button_release(BUTTON_A);
+	}	
+	wait_for_button_release(BUTTON_C);
+	is_ticking = 0;
 	elapsed_time = 0;
 	clear();
-
-			a_is_pressed = 1;
-			is_ticking = !is_ticking;
-
-
-		print_long((elapsed_time/1000/60/10)%10); // tens of minutes
-		print_long((elapsed_time/1000/60)%10); // minutes
-		print_character(':');
-		print_long((elapsed_time/1000)%60/10); // tens of seconds
-		char seconds = ((elapsed_time/1000)%60)%10;
-		print_long(seconds); // seconds
-		print_character('.');
-		print_long((elapsed_time/100)%10); // tenths of seconds
-		print_long((elapsed_time/10)%10); // hundredths of seconds
-
-		
-		
-		last_seconds = seconds;
 	
+	// start ticking
+	is_ticking = 1;
+			
+	print_long((elapsed_time/1000/60/10)%10); 
+	print_long((elapsed_time/1000/60)%10); 
+	print_character(':');
+	print_long((elapsed_time/1000)%60/10); 
+	char seconds = ((elapsed_time/1000)%60)%10;
+	print_long(seconds); 
+	print_character('.');
+	print_long((elapsed_time/100)%10);
+	print_long((elapsed_time/10)%10); 
+
+			
 
 
-	play("L8bfareg4");
-	while(is_playing());
+	
 }
 ///-------------------------------------------- KALIBRASI -----------------------------------------
 ///-----------------------------------------------------------------------------------------------
@@ -587,21 +585,25 @@ while(1)
  	{ 
 	read_line_white(sensors,IR_EMITTERS_ON);
 	set_motors(70,-70);
+	delay_ms(50);
 	if(sensors[2]>500)
-	{
+		{
 	 while(1)
-       {
-	     read_line_white(sensors,IR_EMITTERS_ON);
- 	     right_led(1);
-	     set_motors(70,-70);
-	     if(sensors[2]<100)
-	     {
-		 right_led(0);
-	     break;
-	     }
-		 }
+			{
+				read_line_white(sensors,IR_EMITTERS_ON);
+ 				right_led(1);
+				set_motors(70,-70);
+				
+				if(sensors[2]<100 && sensors[4]>500)
+					{
+						right_led(0);
+						delay_ms(100);
+						set_motors(0,0);
+						break;
+					}
+			}
 		 break;
-	   }
+		}
       
 	} 
 }
@@ -640,19 +642,22 @@ unsigned int sensors[5];
 while(1)
  	{ 
 	read_line_white(sensors,IR_EMITTERS_ON);
-	set_motors(-70,70);
+	set_motors(-86,80);
 	if(sensors[2]>500)
 	   {
 	     while(1)
          {
-	      read_line_white(sensors,IR_EMITTERS_ON);
- 	      left_led(1);
-	      set_motors(-70,70);
-	      if(sensors[2]<100)
-	       {
-		   left_led(0);
-	       break;
-	       }
+			read_line_white(sensors,IR_EMITTERS_ON);
+ 			left_led(1);
+			set_motors(-86,80);
+			
+			if(sensors[2]<100 && sensors[0]>500 )
+			{
+				left_led(0);
+				delay_ms(100);
+				set_motors(0,0);
+				break;
+			}
 		 }
 		 break;
 	   }
@@ -708,16 +713,16 @@ void p()
 void lompat_ks()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(speed,speed);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		if ( sensors[2]>500 && sensors[1]>500 && sensors[3]>500 )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(speed,speed);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -727,16 +732,16 @@ void lompat_ks()
 void lompat_ksp()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		if ( sensors[2]<100 && sensors[1]<100 && sensors[3]<100 )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -746,16 +751,16 @@ void lompat_ksp()
 void lompat_h()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
-		if ( sensors[2]>500 )
+		if ( sensors[2]>500 && sensors[3]>500 && sensors[1]>500 )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -765,16 +770,16 @@ void lompat_h()
 void lompat_p()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
-		if ( sensors[2]<100 )
+		if ( sensors[2]<100 && sensors[1]<100 && sensors[3]<100 )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -784,16 +789,16 @@ void lompat_p()
 void lompat_kn()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		if ( (sensors[2]>500 && sensors[4]>500 && sensors[3]>500) || (sensors[4]>500 && sensors[3]>500) || (sensors[4]>500) )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -803,14 +808,14 @@ void lompat_kn()
 void lompat_knp()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		if ( (sensors[2]<100 && sensors[4]<100 && sensors[3]<100) || (sensors[4]<100 && sensors[3]<100) || (sensors[4]<100) )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
 			set_motors(0,0);
 			break;
@@ -822,16 +827,16 @@ void lompat_knp()
 void lompat_ki()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		if ( (sensors[2]>500 && sensors[1]>500 && sensors[0]>500) || (sensors[1]>500 && sensors[0]>500) || (sensors[0]>500) )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -841,16 +846,16 @@ void lompat_ki()
 void lompat_kip()
 {
 	unsigned int sensors[5];
-	set_motors(100,100);
+	set_motors(106,100);
 	while (1)
 	{
 		read_line(sensors,IR_EMITTERS_ON);
 		if ( (sensors[2]<100 && sensors[1]<100 && sensors[0]<100) || (sensors[1]<100 && sensors[0]<100) || (sensors[0]<100) )
 		{
 			play("L16ag");
-			set_motors(70,70);
+			set_motors(76,70);
 			delay_ms(50);
-			set_motors(0,0);
+			
 			break;
 		}
 	}
@@ -867,24 +872,23 @@ void jalan_sensor_34()
 		 
 		 unsigned int position = read_line(sensors,IR_EMITTERS_ON);
 		 
-		 if(position < 1000)
+		 if(position >= 4000)
 		 {
 	
-			 set_motors(0,100);
+			 set_motors(100,50);
 			 
 		 }
-		 else if(position < 3000)
+		 else if(position >= 3000)
 		 {
 			
 			 set_motors(100,100);
-			 left_led(1);
-			 right_led(1);
+			 
 		 }
-		 else
+		 else if(position < 3100)
 		 {
-			 set_motors(100,0);
-			 left_led(0);
-			 right_led(1);
+			 
+			 set_motors(50,100);
+			 
 		 }
 		 break;
 	 }
@@ -898,24 +902,24 @@ void jalan_sensor_01()
 		
 		unsigned int position = read_line(sensors,IR_EMITTERS_ON);
 		
-		if(position < 1000)
+		if(position < 200)
 		{
 			
-			set_motors(0,100);
+			set_motors(50,100);
 			
 		}
-		else if(position < 3000)
+		else if(position <= 700)
 		{
 			
 			set_motors(100,100);
 			left_led(1);
 			right_led(1);
 		}
-		else
+		else if(position < 1100)
 		{
-			set_motors(100,0);
-			left_led(0);
-			right_led(1);
+			
+			set_motors(100,50);
+			
 		}
 		
 	}
@@ -1064,8 +1068,9 @@ set_motors(0,0);
 void end()
 {
 set_motors(0,0);
+//stop ticking
 is_ticking = 0;
-while(!button_is_pressed(BUTTON_A));
+while(!button_is_pressed(BUTTON_C));
 }
 ///============================================= STOP LOOP ================================================
 
