@@ -4,9 +4,6 @@ unsigned int sensors[5];
 unsigned int last_proportional=0;
 long integral=0;
 unsigned char speed;
-static long elapsed_time = 0;
-static long last_read = 0;
-static long is_ticking = 0;
 
 
 
@@ -71,11 +68,7 @@ void initialize()
 	
 	pololu_3pi_init(2000);
 	load_custom_characters();
-	long current_time = get_ms();
-	if(is_ticking)
-	elapsed_time += current_time - last_read;
 	
-	last_read = current_time;
 	
 	while(!button_is_pressed(BUTTON_C))
 	{
@@ -114,22 +107,12 @@ void initialize()
 		delay_ms(100);
 	}	
 	wait_for_button_release(BUTTON_C);
-	is_ticking = 0;
-	elapsed_time = 0;
+	delay_ms(250);
 	clear();
 	
-	// start ticking
-	is_ticking = 1;
+	
 			
-	print_long((elapsed_time/1000/60/10)%10); 
-	print_long((elapsed_time/1000/60)%10); 
-	print_character(':');
-	print_long((elapsed_time/1000)%60/10); 
-	char seconds = ((elapsed_time/1000)%60)%10;
-	print_long(seconds); 
-	print_character('.');
-	print_long((elapsed_time/100)%10);
-	print_long((elapsed_time/10)%10); 
+	
 
 			
 
@@ -190,6 +173,7 @@ void pid_p()
 			set_motors(speed, speed-power_difference);
 }
 ///============================================= PID PUTIH =============================================
+
 
 void kkn()
 {	 
@@ -501,18 +485,27 @@ void putus_putus()
 		read_line(sensors,IR_EMITTERS_ON);
 		if(sensors[2]<100)
 		{
-			set_motors(70,70);
+			set_motors(50,50);
+			read_line(sensors,IR_EMITTERS_ON);
 			while(1)
 			{
-				read_line_white(sensors,IR_EMITTERS_ON); 
+				read_line_white(sensors,IR_EMITTERS_ON);
 				if(sensors[3]>400 || sensors[2]>400 || sensors[1]>400)
 				{
-					set_motors(0,0);
-					delay_ms(50);
+					set_motors(50,50);
+					
 					break;
 				}
+				break;
 			}
 		}
+		else if(sensors[3]>400 && sensors[2]>400 && sensors[1]>400)
+		{
+			break;
+		}
+		
+	
+		
 		break;
 	}
 }
@@ -1068,8 +1061,7 @@ set_motors(0,0);
 void end()
 {
 set_motors(0,0);
-//stop ticking
-is_ticking = 0;
+
 while(!button_is_pressed(BUTTON_C));
 }
 ///============================================= STOP LOOP ================================================
@@ -1116,8 +1108,8 @@ void ki90()
 
 void ki135()
 { 
-  set_motors(-50,50);
-  delay_ms(400);
+  set_motors(-70,70);
+  delay_ms(310);
   set_motors(0,0);
 }
 ///=================== KIRI 135 ====================================================================
@@ -1145,12 +1137,15 @@ void ki30()
 
 int main()
 {
-cepat_h = 150 ; // Kecepatan motor pada lintasan hitam
-cepat_p = 100 ; // Kecepatan motor pada lintasan putih
+cepat_h = 180 ; // Kecepatan motor ketika membaca lintasan hitam
+cepat_p = 100 ; // Kecepatan motor ketika membaca lintasan putih
+
 
 initialize();
+
 while(1)
   {
+  
   
   
 
